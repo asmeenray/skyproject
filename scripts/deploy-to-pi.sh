@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
-# Push the current working tree to the Skylight Pi, rebuild, restart the server,
+# Push the current working tree to the skyproject Pi, rebuild, restart the server,
 # and reload the kiosk. Configure via env:
-#   PI_HOST     (default skylight.local)
+#   PI_HOST     (default skyproject.local)
 #   PI_USER     (default pi)
-#   PI_APPDIR   (default /home/<PI_USER>/skylight)
+#   PI_APPDIR   (default /home/<PI_USER>/skyproject)
 #   SSH_KEY     (default ~/.ssh/id_ed25519 — a passphrase-less deploy key is ideal)
-#   SERVICE     (default skylight-server)
+#   SERVICE     (default skyproject-server)
 #
 # Example:
-#   PI_HOST=skylight.local ./scripts/deploy-to-pi.sh
+#   PI_HOST=skyproject.local ./scripts/deploy-to-pi.sh
 set -euo pipefail
 
-PI_HOST="${PI_HOST:-skylight.local}"
+PI_HOST="${PI_HOST:-skyproject.local}"
 PI_USER="${PI_USER:-pi}"
-PI_APPDIR="${PI_APPDIR:-/home/$PI_USER/skylight}"
+PI_APPDIR="${PI_APPDIR:-/home/$PI_USER/skyproject}"
 SSH_KEY="${SSH_KEY:-$HOME/.ssh/id_ed25519}"
-SERVICE="${SERVICE:-skylight-server}"
+SERVICE="${SERVICE:-skyproject-server}"
 SSH="ssh -i $SSH_KEY -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new"
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
@@ -42,7 +42,7 @@ $SSH "$PI_USER@$PI_HOST" '
   export XDG_RUNTIME_DIR=/run/user/$(id -u) WAYLAND_DISPLAY=wayland-1
   pkill -f "/usr/lib/chrom[i]um" 2>/dev/null || true
   sleep 2
-  setsid "$HOME/.local/bin/skylight-kiosk.sh" < /dev/null > "$HOME/kiosk.log" 2>&1 &
+  setsid "$HOME/.local/bin/skyproject-kiosk.sh" < /dev/null > "$HOME/kiosk.log" 2>&1 &
   sleep 1
 ' || true
 

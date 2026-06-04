@@ -1,7 +1,7 @@
-# systemd unit for the Skylight server (data + WebSocket + serves the built web app).
+# systemd unit for the skyproject server (data + WebSocket + serves the built web app).
 # Installed to /etc/systemd/system/ by install-on-pi.sh.
 [Unit]
-Description=Skylight server
+Description=skyproject server
 After=network-online.target dump1090-fa.service
 Wants=network-online.target
 

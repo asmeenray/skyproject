@@ -1,16 +1,11 @@
-<h1 align="center">Skylight</h1>
+<h1 align="center">skyproject</h1>
 
 <p align="center">
   <em>Project the aircraft passing overhead onto your ceiling, in real time — an X-ray through the roof.</em>
 </p>
 
 <p align="center">
-  <a href="https://skylightceiling.com"><b>🛰️ Get notified when I launch on a crowdfunding platform → skylightceiling.com</b></a>
-  <br><sub>A ready-made kit is coming. Join the waitlist for early access &amp; launch pricing.</sub>
-</p>
-
-<p align="center">
-  <img src="docs/skylight.png" alt="Skylight projected on a ceiling: aircraft, trails, SFO runways and the night sky" width="100%">
+  <img src="docs/skyproject.png" alt="skyproject projected on a ceiling: aircraft, trails, SFO runways and the night sky" width="100%">
 </p>
 
 <p align="center">
@@ -21,7 +16,7 @@ https://github.com/user-attachments/assets/9256b0eb-cc27-4388-9a4f-0a6c05468304
 
 </p>
 
-Skylight decodes ADS-B from a cheap RTL-SDR radio and renders the planes physically
+skyproject decodes ADS-B from a cheap RTL-SDR radio and renders the planes physically
 flying over you onto a ceiling-pointed projector. A jet you'd hear overhead glides
 across your ceiling at the same moment — labeled with its airline, type, and where it's
 headed. Pure-black background so the projector's rectangle disappears and only the
@@ -113,7 +108,7 @@ provision the SD card, install the driver + decoder + app, and set up the boot-t
 display. Once it's running, push updates from your dev machine with:
 
 ```bash
-PI_HOST=skylight.local ./scripts/deploy-to-pi.sh
+PI_HOST=skyproject.local ./scripts/deploy-to-pi.sh
 ```
 
 ## Configuration

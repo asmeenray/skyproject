@@ -7,7 +7,7 @@ set -euo pipefail
 URL="${URL:-http://localhost:3000/}"
 CHROMIUM="$(command -v chromium-browser || command -v chromium || echo chromium-browser)"
 
-LAUNCH="$HOME/.local/bin/skylight-kiosk.sh"
+LAUNCH="$HOME/.local/bin/skyproject-kiosk.sh"
 mkdir -p "$HOME/.local/bin"
 cat > "$LAUNCH" <<EOF
 #!/usr/bin/env bash
@@ -32,14 +32,14 @@ if [ -d "$HOME/.config/wayfire.ini" ] || grep -qi wayfire /etc/xdg/labwc/* 2>/de
 if command -v labwc >/dev/null 2>&1; then
   mkdir -p "$HOME/.config/labwc"
   AUTOSTART="$HOME/.config/labwc/autostart"
-  grep -q skylight-kiosk "$AUTOSTART" 2>/dev/null || echo "$LAUNCH &" >> "$AUTOSTART"
+  grep -q skyproject-kiosk "$AUTOSTART" 2>/dev/null || echo "$LAUNCH &" >> "$AUTOSTART"
   # Keep the screen awake.
   echo "==> labwc detected; kiosk added to $AUTOSTART"
 elif command -v wayfire >/dev/null 2>&1; then
   INI="$HOME/.config/wayfire.ini"
   touch "$INI"
   if ! grep -q "\[autostart\]" "$INI"; then printf "\n[autostart]\n" >> "$INI"; fi
-  grep -q skylight-kiosk "$INI" || sed -i "/\[autostart\]/a skylight = $LAUNCH" "$INI"
+  grep -q skyproject-kiosk "$INI" || sed -i "/\[autostart\]/a skyproject = $LAUNCH" "$INI"
   grep -q "screensaver" "$INI" || sed -i "/\[autostart\]/a screensaver = false\ndpms = false" "$INI"
   echo "==> wayfire detected; kiosk added to $INI"
 else

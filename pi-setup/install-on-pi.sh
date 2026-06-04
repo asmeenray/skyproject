@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Run ON the Raspberry Pi (over SSH) to install the full appliance:
 #   rtl-sdr-blog driver + DVB-T blacklist, dump1090-fa, Node + pnpm, this app
-#   (built), and the skylight-server systemd service.
+#   (built), and the skyproject-server systemd service.
 # Kiosk autostart is set up separately by setup-kiosk.sh (needs the desktop).
 set -euo pipefail
 
-APPDIR="${APPDIR:-$HOME/skylight}"
+APPDIR="${APPDIR:-$HOME/skyproject}"
 USER_NAME="$(id -un)"
 # Receiver reference position (set to your location). Defaults to SFO.
 LAT="${LAT:-37.6213}"
@@ -91,16 +91,16 @@ cd "$APPDIR"
 pnpm install
 pnpm build
 
-echo "==> skylight-server systemd service"
+echo "==> skyproject-server systemd service"
 PNPM_BIN="$(command -v pnpm)"
 sudo sed \
   -e "s#__USER__#$USER_NAME#g" \
   -e "s#__APPDIR__#$APPDIR#g" \
   -e "s#__PNPM__#$PNPM_BIN#g" \
-  "$APPDIR/pi-setup/skylight-server.service" \
-  | sudo tee /etc/systemd/system/skylight-server.service >/dev/null
+  "$APPDIR/pi-setup/skyproject-server.service" \
+  | sudo tee /etc/systemd/system/skyproject-server.service >/dev/null
 sudo systemctl daemon-reload
-sudo systemctl enable --now skylight-server.service
+sudo systemctl enable --now skyproject-server.service
 
 IP="$(hostname -I | awk '{print $1}')"
 echo

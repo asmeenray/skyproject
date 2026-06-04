@@ -1,6 +1,6 @@
 # Raspberry Pi setup
 
-Turn a freshly-flashed Raspberry Pi OS card into the Skylight appliance. Tested on a
+Turn a freshly-flashed Raspberry Pi OS card into the skyproject appliance. Tested on a
 **Raspberry Pi 5** with **Raspberry Pi OS Bookworm (64-bit, Desktop)**.
 
 ## 1. Provision the card (headless WiFi + SSH) — on your computer
@@ -10,7 +10,7 @@ Flash Raspberry Pi OS (Desktop) to the card. With the card's **boot** partition 
 
 ```bash
 sudo BOOT_MNT=/mnt/sdboot \
-  HOSTNAME_PI=skylight \
+  HOSTNAME_PI=skyproject \
   WIFI_SSID="YourWiFi" WIFI_PSK="YourPassword" WIFI_COUNTRY=US \
   PUBKEY="$(cat ~/.ssh/id_ed25519.pub)" \
   ./provision-sd.sh
@@ -23,7 +23,7 @@ passphrase-less key, or load yours into an agent, so unattended `rsync`/deploy w
 Eject, boot the Pi, wait ~60–90 s, then:
 
 ```bash
-ssh pi@skylight.local        # or ssh pi@<pi-ip>
+ssh pi@skyproject.local        # or ssh pi@<pi-ip>
 ```
 
 > **Tip:** if your only key is passphrase-protected, either generate a dedicated
@@ -35,13 +35,13 @@ ssh pi@skylight.local        # or ssh pi@<pi-ip>
 Copy the repo to the Pi and run the installer:
 
 ```bash
-git clone https://github.com/cpaczek/skylight.git ~/skylight   # or rsync it over
-cd ~/skylight
+git clone https://github.com/cpaczek/skylight.git ~/skyproject   # or rsync it over
+cd ~/skyproject
 LAT=37.6213 LON=-122.379 ./pi-setup/install-on-pi.sh            # set your coordinates
 ```
 
 Installs the rtl-sdr-blog V4 driver (+ DVB-T blacklist), dump1090-fa, Node + pnpm,
-builds the app, and enables the `skylight-server` service. **Verify decode first** with
+builds the app, and enables the `skyproject-server` service. **Verify decode first** with
 `rtl_test -t` and `curl -s localhost:8080/aircraft.json | head` before moving on.
 
 ## 3. Kiosk display — on the Pi
@@ -61,7 +61,7 @@ Wayland GPU path crashes on the Pi 5), cursor hidden, screen blanking off.
 
 ## 4. Calibrate
 
-From your phone open `http://skylight.local:3000/control` and tune **rotation** + **mirror**
+From your phone open `http://skyproject.local:3000/control` and tune **rotation** + **mirror**
 against a real overhead pass until the ceiling tracks the sky (it's a calibration, not a
 formula — you're projecting up and looking up).
 
@@ -70,7 +70,7 @@ formula — you're projecting up and looking up).
 From your dev machine, after editing code:
 
 ```bash
-PI_HOST=skylight.local ./scripts/deploy-to-pi.sh
+PI_HOST=skyproject.local ./scripts/deploy-to-pi.sh
 ```
 
 (rsyncs the source, rebuilds on the Pi, restarts the server, and reloads the kiosk.)
@@ -81,5 +81,5 @@ PI_HOST=skylight.local ./scripts/deploy-to-pi.sh
 |---|---|---|
 | `provision-sd.sh` | your PC | headless WiFi + SSH onto the SD boot partition |
 | `install-on-pi.sh` | the Pi | driver + decoder + Node + app + server service |
-| `skylight-server.service` | the Pi | systemd unit template for the server |
+| `skyproject-server.service` | the Pi | systemd unit template for the server |
 | `setup-kiosk.sh` | the Pi | Chromium kiosk autostart + no-blanking |
