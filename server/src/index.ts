@@ -102,6 +102,8 @@ async function main(): Promise<void> {
   server.listen(PORT, HOST, () => {
     console.log(`[server] listening on http://${HOST}:${PORT}`);
     console.log(`[server] data source: ${SOURCE} (${SOURCE === "radio" ? RADIO_URL : API_URL})`);
+    const cfg = store.get();
+    console.log(`[server] center: ${cfg.centerLat},${cfg.centerLon} radiusMiles=${cfg.radiusMiles} showAirport=${cfg.showAirport}`);
     console.log(`[server] control panel: http://<this-host>:${PORT}/control`);
   });
 }

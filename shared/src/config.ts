@@ -111,11 +111,11 @@ export interface Config {
 }
 
 export const DEFAULT_CONFIG: Config = {
-  // Default center: San Francisco International (SFO). Set this to your own
-  // location — ideally where you'll be looking up at the ceiling.
-  centerLat: 37.6213,
-  centerLon: -122.379,
-  radiusMiles: 3,
+  // Default center: the user's London neighborhood (Bromley, south-east London).
+  // Set this to your own location — ideally where you'll be looking up at the ceiling.
+  centerLat: 51.363677848272474,
+  centerLon: 0.08892120184633136,
+  radiusMiles: 5,
 
   rotationDeg: 0,
   mirrorX: true,
@@ -167,7 +167,7 @@ export const DEFAULT_CONFIG: Config = {
   rangeRings: true,
   compass: true,
   highlightEmergency: true,
-  showAirport: true,
+  showAirport: false,
   showHud: false,
 
   showStars: true,

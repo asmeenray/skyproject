@@ -359,7 +359,8 @@ export class Renderer {
 
     if (cfg.rangeRings) {
       ctx.save();
-      for (let mi = 1; mi <= Math.floor(cfg.radiusMiles); mi++) {
+      const ringStep = [1, 2, 5, 10, 25, 50, 100].find((s) => cfg.radiusMiles / s <= 8) ?? 100;
+      for (let mi = ringStep; mi <= cfg.radiusMiles + 1e-6; mi += ringStep) {
         const r = mi * 1609.34 * proj.pxPerM;
         ctx.beginPath();
         ctx.arc(cx, cy, r, 0, Math.PI * 2);

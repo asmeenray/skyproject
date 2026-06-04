@@ -90,7 +90,7 @@ export function Control() {
               onChange={(v) => set({ labelRotationDeg: v })} />
           </Row>
           <Row label="Radius">
-            <Slider value={cfg.radiusMiles} min={0.5} max={10} step={0.5} unit="mi"
+            <Slider value={cfg.radiusMiles} min={0.5} max={50} step={0.5} unit="mi"
               onChange={(v) => set({ radiusMiles: v })} />
           </Row>
         </Section>
