@@ -69,6 +69,39 @@ export function Slider({
   );
 }
 
+export function NumberInput({
+  value,
+  min,
+  max,
+  step,
+  unit = "",
+  onChange,
+}: {
+  value: number;
+  min?: number;
+  max?: number;
+  step?: number;
+  unit?: string;
+  onChange: (v: number) => void;
+}) {
+  return (
+    <div className="number-input">
+      <input
+        type="number"
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        onChange={(e) => {
+          const parsed = parseFloat(e.target.value);
+          if (!Number.isNaN(parsed)) onChange(parsed);
+        }}
+      />
+      {unit && <span className="number-unit">{unit}</span>}
+    </div>
+  );
+}
+
 export function Segmented<T extends string>({
   value,
   options,

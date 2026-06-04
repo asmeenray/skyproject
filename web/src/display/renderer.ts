@@ -370,10 +370,37 @@ export class Renderer {
         ctx.stroke();
       }
       ctx.setLineDash([]);
-      // Center mark.
+      ctx.restore();
+    }
+
+    // "You are here" marker — always visible (the projection is centered on
+    // centerLat/centerLon, so screen center IS the user's location). Decoupled
+    // from rangeRings and drawn in the accent color so it reads as "home".
+    {
+      ctx.save();
+      ctx.setLineDash([]);
+      const accent = hexToRgb(cfg.palette.accent);
+      // Crosshair ticks: a 4px gap out to 9px along each axis.
+      ctx.strokeStyle = rgba(accent, 0.45 * cfg.brightness);
+      ctx.lineWidth = 1;
       ctx.beginPath();
-      ctx.arc(cx, cy, 2, 0, Math.PI * 2);
-      ctx.fillStyle = rgba(hexToRgb(cfg.palette.grid), 0.7 * cfg.brightness);
+      ctx.moveTo(cx - 9, cy);
+      ctx.lineTo(cx - 4, cy);
+      ctx.moveTo(cx + 4, cy);
+      ctx.lineTo(cx + 9, cy);
+      ctx.moveTo(cx, cy - 9);
+      ctx.lineTo(cx, cy - 4);
+      ctx.moveTo(cx, cy + 4);
+      ctx.lineTo(cx, cy + 9);
+      ctx.stroke();
+      // Thin ring.
+      ctx.beginPath();
+      ctx.arc(cx, cy, 7, 0, Math.PI * 2);
+      ctx.stroke();
+      // Filled center dot.
+      ctx.beginPath();
+      ctx.arc(cx, cy, 3, 0, Math.PI * 2);
+      ctx.fillStyle = rgba(accent, 0.9 * cfg.brightness);
       ctx.fill();
       ctx.restore();
     }

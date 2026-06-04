@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { Config, ShowFields } from "@shared/index.js";
 import { useStream } from "../lib/useStream.js";
 import { nextISSPass, type Tle } from "../display/celestial.js";
-import { ColorRow, Row, Section, Segmented, Slider, Toggle } from "./components.js";
+import { ColorRow, NumberInput, Row, Section, Segmented, Slider, Toggle } from "./components.js";
 
 function skyTimeLabel(offsetMin: number): string {
   if (offsetMin === 0) return "live";
@@ -30,6 +30,8 @@ const FIELD_LABELS: Record<keyof ShowFields, string> = {
 export function Control() {
   const { state, conn } = useStream("control");
   const cfg = state.config;
+
+  const [geoStatus, setGeoStatus] = useState<string | null>(null);
 
   // ISS pass finder (for the Sky section).
   const [tles, setTles] = useState<Tle[]>([]);
@@ -61,6 +63,30 @@ export function Control() {
   const setField = (k: keyof ShowFields, v: boolean) =>
     conn.patchConfig({ showFields: { ...cfg.showFields, [k]: v } });
 
+  const useMyLocation = () => {
+    // Geolocation requires a secure context; the LAN serves over plain http,
+    // so this path is expected — keep it non-fatal and visible.
+    if (!("geolocation" in navigator) || !window.isSecureContext) {
+      setGeoStatus("Location needs HTTPS — enter coords manually");
+      return;
+    }
+    try {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          set({ centerLat: pos.coords.latitude, centerLon: pos.coords.longitude });
+          setGeoStatus("Centered on your location");
+        },
+        (err) => {
+          setGeoStatus("Couldn't get location: " + err.message);
+        },
+        { enableHighAccuracy: true, timeout: 10000 },
+      );
+    } catch {
+      // Older WebViews can throw synchronously; never let it crash the panel.
+      setGeoStatus("Location unavailable — enter coords manually");
+    }
+  };
+
   return (
     <div className="control">
       <header className="topbar">
@@ -74,6 +100,23 @@ export function Control() {
       </header>
 
       <main>
+        <Section title="Location">
+          <Row label="Latitude">
+            <NumberInput value={cfg.centerLat} step={0.000001} min={-90} max={90}
+              onChange={(v) => set({ centerLat: v })} />
+          </Row>
+          <Row label="Longitude">
+            <NumberInput value={cfg.centerLon} step={0.000001} min={-180} max={180}
+              onChange={(v) => set({ centerLon: v })} />
+          </Row>
+          <div className="chips">
+            <button className="chip" onClick={useMyLocation}>
+              Use my location
+            </button>
+          </div>
+          {geoStatus && <div className="geo-status">{geoStatus}</div>}
+        </Section>
+
         <Section title="Calibration">
           <Row label="Rotation" hint="align field to ceiling">
             <Slider value={cfg.rotationDeg} min={0} max={355} step={5} unit="°"
